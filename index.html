@@ -69,20 +69,30 @@
         camera.lookAt(scene.position);
 
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
-
+        var cubeData = {rotX: 0, rotY: 0, size: 4};
+        var tween = new TWEEN.Tween(cubeData).to({rotX: 25, rotY: 25, size: 50}, 5000).onUpdate(function() {
+          cube.rotation.x = cubeData.rotX;
+          cube.rotation.y = cubeData.rotY;
+          cube.geometry = new THREE.BoxGeometry(cubeData.size, cubeData.size, cubeData.size);
+        }).easing(TWEEN.Easing.Quadratic.InOut).repeat(Infinity).yoyo().start();
         animate();
 
 			}
       
-      function animate() {
+      function animate(time) {
         requestAnimationFrame(animate);
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-        cubeSize += cubeDir;
-        if(cubeSize < 4 || cubeSize > 40) {
-          cubeDir *= -1;
+        TWEEN.update(time);
+        renderer.render(scene, camera);
+      }
+
+      function tween() {
+        var cubeData = {
+          rotationX: 0,
+          rotationY: 0,
+          size: 4
         }
-        cube.geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+
+       
         renderer.render(scene, camera);
       }
 
