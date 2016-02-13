@@ -1,0 +1,23 @@
+{
+  "name": "threejs-tween",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thales17/threejs-tween.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thales17/threejs-tween/issues"
+  },
+  "homepage": "https://github.com/thales17/threejs-tween#readme",
+  "dependencies": {
+    "three.js": "^0.73.2",
+    "tween.js": "^16.3.4"
+  }
+}
