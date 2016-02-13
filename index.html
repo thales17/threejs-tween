@@ -3,7 +3,7 @@
 	<head>
 		<title>Threejs Tween</title>
 		<script src="node_modules/three/three.js"></script>
-    <script src="node_modles/tween.js/src/Tween.js"></script>
+    <script src="node_modules/tween.js/src/Tween.js"></script>
 		<style>
 		body {
 			margin: 0;
@@ -16,11 +16,16 @@
 		</div>
 
 		<script>
+      var scene, renderer, camera;
+      var cube, sphere;
+      var cubeSize = 4;
+      var cubeDir = 1;
+      
 			function init() {
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-        var renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer();
         renderer.setClearColor(0xeeeeee);
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -39,16 +44,19 @@
 
         var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
         var cubeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
-        var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
         cube.position.x = -4;
         cube.position.y = 3;
         cube.position.z = 0;
         scene.add(cube);
 
+        console.log(cube);
+        console.log(cube.geometry);
+
         var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
         var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: true});
-        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
         sphere.position.x = 20;
         sphere.position.y = 4;
@@ -62,9 +70,21 @@
 
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
-        renderer.render(scene, camera);
+        animate();
 
 			}
+      
+      function animate() {
+        requestAnimationFrame(animate);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        cubeSize += cubeDir;
+        if(cubeSize < 4 || cubeSize > 40) {
+          cubeDir *= -1;
+        }
+        cube.geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        renderer.render(scene, camera);
+      }
 
 			window.onload = init;
 		</script>
