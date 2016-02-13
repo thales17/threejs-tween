@@ -63,6 +63,12 @@
         sphere.position.z = 2;
         scene.add(sphere);
 
+        var cylinderGeometry = new THREE.CylinderGeometry(4, 4, 4, 32);
+        var cylinderMaterial = new THREE.MeshBasicMaterial({color: 0xf1e30c, wireframe: true});
+        var cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+        cylinder.rotation.z = Math.PI/2;
+        scene.add(cylinder);
+
         camera.position.x = -30;
         camera.position.y = 40;
         camera.position.z = 30;
@@ -71,28 +77,17 @@
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
         var cubeData = {rotX: 0, rotY: 0, size: 4};
         var tween = new TWEEN.Tween(cubeData).to({rotX: 25, rotY: 25, size: 50}, 5000).onUpdate(function() {
-          cube.rotation.x = cubeData.rotX;
-          cube.rotation.y = cubeData.rotY;
-          cube.geometry = new THREE.BoxGeometry(cubeData.size, cubeData.size, cubeData.size);
+          //cylinder.rotation.z = cubeData.rotX;
+          //cylinder.rotation.y = cubeData.rotY;
+          cylinder.geometry = new THREE.CylinderGeometry(4, cubeData.size, cubeData.size, 32);
         }).easing(TWEEN.Easing.Quadratic.InOut).repeat(Infinity).yoyo().start();
+        
         animate();
-
 			}
       
       function animate(time) {
         requestAnimationFrame(animate);
         TWEEN.update(time);
-        renderer.render(scene, camera);
-      }
-
-      function tween() {
-        var cubeData = {
-          rotationX: 0,
-          rotationY: 0,
-          size: 4
-        }
-
-       
         renderer.render(scene, camera);
       }
 
