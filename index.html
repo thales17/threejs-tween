@@ -69,13 +69,10 @@
           
           var tubeData = {angle: 0};
           document.getElementById("WebGL-output").addEventListener("click", function(ev) {
-            console.log("Click");
-            var newAngle = tubeData.angle === 0 ? 4 : 0;
+            var newAngle = tubeData.angle === 0 ? 6 : 0;
             var tween = new TWEEN.Tween(tubeData).to({angle: newAngle}, 2000).onUpdate(function() {
-              //console.log(tubeData.angle);
-              path = new CustomSinCurve(15, tubeData.angle);
               tube.geometry.dispose();
-              tube.geometry = new THREE.TubeGeometry(path, 100, 3, 20, false);
+              tube.geometry = new THREE.TubeGeometry(new CustomSinCurve(15, tubeData.angle), 100, 3, 20, false);
             }).easing(TWEEN.Easing.Quadratic.InOut).start();
 
           });
