@@ -44,7 +44,7 @@
           var CustomSinCurve = THREE.Curve.create(
             function(scale, angle) {
               this.scale = (scale === undefined) ? 1 : scale;
-              this.angle = (angle === undefined) ? 1 : angle;
+              this.angle = (angle === undefined) ? 0 : angle;
             },
             function(t) {
               var tx = t * 3 - 1.5,
@@ -53,25 +53,30 @@
               return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale)
             }
           );
-          var path = new CustomSinCurve(10, 0);
+          var path = new CustomSinCurve(15, 0);
 
           var geometry = new THREE.TubeGeometry(
               path, //path
-              200,   //segments
-              2,    //radius
-              8,    //radiusSegments
+              100,   //segments
+              3,    //radius
+              20,    //radiusSegments
               false //closed
           );
-          var material = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe: true});
+          var material = new THREE.MeshBasicMaterial({color: 0x00ffff, wireframe: true});
           var tube = new THREE.Mesh(geometry, material);
           scene.add(tube);
           
           var tubeData = {angle: 0};
-          var tween = new TWEEN.Tween(tubeData).to({angle: 4}, 5000).onUpdate(function() {
-            //console.log(tubeData.angle);
-            path = new CustomSinCurve(10, tubeData.angle);
-            tube.geometry = new THREE.TubeGeometry(path, 200, 2, 8, false);
-          }).easing(TWEEN.Easing.Quadratic.InOut).repeat(Infinity).start();
+          document.getElementById("WebGL-output").addEventListener("click", function(ev) {
+            console.log("Click");
+            var newAngle = tubeData.angle === 0 ? 4 : 0;
+            var tween = new TWEEN.Tween(tubeData).to({angle: newAngle}, 2000).onUpdate(function() {
+              //console.log(tubeData.angle);
+              path = new CustomSinCurve(15, tubeData.angle);
+              tube.geometry = new THREE.TubeGeometry(path, 100, 3, 20, false);
+            }).easing(TWEEN.Easing.Quadratic.InOut).start();
+
+          });
         }
         
         //cylinder();
