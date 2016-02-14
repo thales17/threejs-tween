@@ -42,30 +42,36 @@
         
         function tube() {
           var CustomSinCurve = THREE.Curve.create(
-            function(scale) {
+            function(scale, angle) {
               this.scale = (scale === undefined) ? 1 : scale;
+              this.angle = (angle === undefined) ? 1 : angle;
             },
             function(t) {
               var tx = t * 3 - 1.5,
-                  ty = Math.sin(2 * Math.PI * t),
+                  ty = Math.sin(this.angle * Math.PI * t),
                   tz = 0;
-
-              return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale);
+              return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale)
             }
           );
-          
-          var path = new CustomSinCurve(20);
+          var path = new CustomSinCurve(10, 0);
 
           var geometry = new THREE.TubeGeometry(
               path, //path
-              20,   //segments
+              200,   //segments
               2,    //radius
               8,    //radiusSegments
               false //closed
           );
-          var material = new THREE.MeshBasicMaterial({color: 0xf1e30c, wireframe: true});
+          var material = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe: true});
           var tube = new THREE.Mesh(geometry, material);
           scene.add(tube);
+          
+          var tubeData = {angle: 0};
+          var tween = new TWEEN.Tween(tubeData).to({angle: 4}, 5000).onUpdate(function() {
+            //console.log(tubeData.angle);
+            path = new CustomSinCurve(10, tubeData.angle);
+            tube.geometry = new THREE.TubeGeometry(path, 200, 2, 8, false);
+          }).easing(TWEEN.Easing.Quadratic.InOut).repeat(Infinity).start();
         }
         
         //cylinder();
