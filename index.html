@@ -36,6 +36,7 @@
           var tween = new TWEEN.Tween(cubeData).to({rotX: 25, rotY: 25, size: 50}, 5000).onUpdate(function() {
             //cylinder.rotation.z = cubeData.rotX;
             //cylinder.rotation.y = cubeData.rotY;
+            cylinder.geometry.dispose();
             cylinder.geometry = new THREE.CylinderGeometry(4, cubeData.size, cubeData.size, 32);
           }).easing(TWEEN.Easing.Quadratic.InOut).repeat(Infinity).yoyo().start();
         }
@@ -73,6 +74,7 @@
             var tween = new TWEEN.Tween(tubeData).to({angle: newAngle}, 2000).onUpdate(function() {
               //console.log(tubeData.angle);
               path = new CustomSinCurve(15, tubeData.angle);
+              tube.geometry.dispose();
               tube.geometry = new THREE.TubeGeometry(path, 100, 3, 20, false);
             }).easing(TWEEN.Easing.Quadratic.InOut).start();
 
