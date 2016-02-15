@@ -74,7 +74,7 @@
           var tween;
           var dir = 1;
           document.getElementById("WebGL-output").addEventListener("click", function(ev) {
-            var newAngle = dir > 0 ? 9 : 0;
+            var newAngle = dir > 0 ? Math.random() * 6 * ((Math.random() > 0.5) ? 1 : -1) : 0;
             dir *= -1;
             if(tween) {
               tween.stop();
