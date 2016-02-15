@@ -41,29 +41,31 @@
           }).easing(TWEEN.Easing.Quadratic.InOut).repeat(Infinity).yoyo().start();
         }
         
-        function tube() {
+        function tube(xOffset, zOffset, color) {
           var CustomSinCurve = THREE.Curve.create(
-            function(scale, angle) {
+            function(scale, angle, xOffset, zOffset) {
               this.scale = (scale === undefined) ? 1 : scale;
               this.angle = (angle === undefined) ? 0 : angle;
+              this.xOffset = (xOffset === undefined) ? 0 : xOffset;
+              this.zOffset = (zOffset === undefined) ? 0 : zOffset;
             },
             function(t) {
-              var tx = t * 3 - 1.5,
-                  ty = Math.sin(this.angle * Math.PI * t),
-                  tz = Math.cos(this.angle * Math.PI * t);
+              var tx = Math.sin(this.angle * Math.PI * t) + this.xOffset,
+                  ty = t * 5 - 2,
+                  tz = Math.cos(this.angle * Math.PI * t) + this.zOffset;
               return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale)
             }
           );
-          var path = new CustomSinCurve(15, 0);
+          var path = new CustomSinCurve(15, 0, xOffset, zOffset);
 
           var geometry = new THREE.TubeGeometry(
               path, //path
-              100,   //segments
+              50,   //segments
               3,    //radius
-              20,    //radiusSegments
+              10,    //radiusSegments
               false //closed
           );
-          var material = new THREE.MeshBasicMaterial({color: 0x00ffff, wireframe: true});
+          var material = new THREE.MeshBasicMaterial({color: color, wireframe: true});
           var tube = new THREE.Mesh(geometry, material);
           scene.add(tube);
           
@@ -71,24 +73,28 @@
           var tween;
           var dir = 1;
           document.getElementById("WebGL-output").addEventListener("click", function(ev) {
-            var newAngle = dir > 0 ? 6 : 0;
+            var newAngle = dir > 0 ? 9 : 0;
             dir *= -1;
             if(tween) {
               tween.stop();
             }
-            tween = new TWEEN.Tween(tubeData).to({angle: newAngle}, 2000).onUpdate(function() {
+            tween = new TWEEN.Tween(tubeData).to({angle: newAngle}, 5000).onUpdate(function() {
               tube.geometry.dispose();
-              tube.geometry = new THREE.TubeGeometry(new CustomSinCurve(15, tubeData.angle), 100, 3, 20, false);
+              tube.geometry = new THREE.TubeGeometry(new CustomSinCurve(15, tubeData.angle, xOffset, zOffset), 50, 3, 10, false);
+              console.log(tubeData.color);
             }).easing(TWEEN.Easing.Quadratic.InOut).start();
 
           });
         }
         
         //cylinder();
-        tube();
-        camera.position.x = -30;
-        camera.position.y = 40;
-        camera.position.z = 30;
+        for(var i = -5; i < 5; i += 1.5) {
+          tube(i, Math.random() * -9, 0xffffff * Math.random());
+        }
+      
+        camera.position.x = 0;//-30;
+        camera.position.y = 20;//20;
+        camera.position.z = 170;//40;
         camera.lookAt(scene.position);
 
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
