@@ -61,12 +61,13 @@
 
           var geometry = new THREE.TubeGeometry(
               path, //path
-              20,   //segments
+              50,   //segments
               1,    //radius
               3,    //radiusSegments
               false //closed
           );
-          var material = new THREE.MeshBasicMaterial({color: color, wireframe: true});
+          var material = new THREE.MeshBasicMaterial({color: color, wireframe: false});
+          material.side = THREE.DoubleSide;
           var tube = new THREE.Mesh(geometry, material);
           scene.add(tube);
           
@@ -81,7 +82,7 @@
             }
             tween = new TWEEN.Tween(tubeData).to({angle: newAngle}, 5000).onUpdate(function() {
               tube.geometry.dispose();
-              tube.geometry = new THREE.TubeGeometry(new CustomSinCurve(15, tubeData.angle, xOffset, zOffset), 20, 1, 3, false);
+              tube.geometry = new THREE.TubeGeometry(new CustomSinCurve(15, tubeData.angle, xOffset, zOffset), 50, 1, 3, false);
             }).easing(TWEEN.Easing.Quadratic.InOut).delay(Math.random() * 1000).start();
 
           });
